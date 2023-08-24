@@ -1,0 +1,29 @@
+{
+  "name": "pantheon-question-two",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.0",
+    "apollo-server-express": "^3.12.0",
+    "axios": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "graphql": "^16.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "nodemon": "^2.0.12"
+  }
+}
