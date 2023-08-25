@@ -1,13 +1,13 @@
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 const imageTypeDefs = require("../schemas/image");
-const fetchDataFromTwoAPIs = require("../utils/fetchImages");
+const fetchDataFromAPIs = require("../utils/fetchDataFromAPIs");
 
 const resolvers = {
   Query: {
     images: async (root, { keyword }) => {
-      const { unsplashImages } = await fetchDataFromTwoAPIs(keyword);
-      console.log(unsplashImages);
-      return unsplashImages;
+      console.log(keyword);
+      const { unsplashImages, pixabayImages } = await fetchDataFromAPIs(keyword);
+      return [...unsplashImages, ...pixabayImages];
     },
   },
 };
