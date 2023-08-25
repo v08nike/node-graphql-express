@@ -5,38 +5,35 @@ const {
   convertPixabayImagesWithSchema,
 } = require("./convertImagesWithSchema");
 
-async function fetchDataFromAPIs(keyword) {
-  const [unsplashPromise, pixabayPromise] = [
-    axios.get(
-      `${unsplashAPIInfo.serverAPI}/?page=1&query=${keyword}&client_id=${unsplashAPIInfo.accessKey}`,
-    ),
-    axios.get(
+async function fetchFromUnsplash(keyword) {
+  try {
+    const response = await axios.get(
+      `${unsplashAPIInfo.serverAPI}/?page=1&query=${keyword}&client_id=${unsplashAPIInfo.accessKey}`
+    );
+    return response.data.results;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+async function fetchFromPixabay(keyword) {
+  try {
+    const response = await axios.get(
       `${pixabayAPIInfo.serverAPI}/?&q=${keyword}&image_type=photo&key=${pixabayAPIInfo.accessKey}`
-    ),
-  ];
+    );
+    return response.data.hits;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
 
-  const [pixabayResponse, unsplashResponse] = await Promise.allSettled([
-    pixabayPromise,
-    unsplashPromise,
+async function fetchDataFromAPIs(keyword) {
+  const [unsplashImages, pixabayImages] = await Promise.all([
+    fetchFromUnsplash(keyword),
+    fetchFromPixabay(keyword),
   ]);
-
-  if (pixabayResponse.status === "rejected") {
-    console.log(pixabayResponse.reason);
-  }
-
-  if (unsplashResponse.status === "rejected") {
-    console.log(unsplashResponse.reason);
-  }
-
-  const pixabayImages =
-    pixabayResponse.status === "fulfilled"
-      ? pixabayResponse.value.data.hits
-      : [];
-
-  const unsplashImages =
-    unsplashResponse.status === "fulfilled"
-      ? unsplashResponse.value.data.results
-      : [];
 
   return {
     unsplashImages: convertUnsplashImagesWithSchema(unsplashImages),
